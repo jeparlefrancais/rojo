@@ -137,6 +137,7 @@ function App:render()
 	return e("ScreenGui", {
 		AutoLocalize = false,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		IgnoreGuiInset = true,
 	}, children)
 end
 
