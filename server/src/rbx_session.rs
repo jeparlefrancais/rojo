@@ -28,9 +28,9 @@ use crate::{
     snapshot_reconciler::{InstanceChanges, reify_root, reconcile_subtree},
 };
 
-const INIT_SCRIPT: &str = "init.lua";
-const INIT_SERVER_SCRIPT: &str = "init.server.lua";
-const INIT_CLIENT_SCRIPT: &str = "init.client.lua";
+const INIT_SCRIPT: &str = "__init__.lua";
+const INIT_SERVER_SCRIPT: &str = "__init__.server.lua";
+const INIT_CLIENT_SCRIPT: &str = "__init__.client.lua";
 
 /// `source_path` or `project_definition` or both must both be Some.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

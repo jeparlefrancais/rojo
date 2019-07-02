@@ -36,10 +36,10 @@ use crate::{
     rbx_session::MetadataPerInstance,
 };
 
-const INIT_MODULE_NAME: &str = "init.lua";
-const INIT_SERVER_NAME: &str = "init.server.lua";
-const INIT_CLIENT_NAME: &str = "init.client.lua";
-const INIT_META_NAME: &str = "init.meta.json";
+const INIT_MODULE_NAME: &str = "__init__.lua";
+const INIT_SERVER_NAME: &str = "__init__.server.lua";
+const INIT_CLIENT_NAME: &str = "__init__.client.lua";
+const INIT_META_NAME: &str = "__init__.meta.json";
 
 pub struct SnapshotContext {
     pub plugin_context: Option<SnapshotPluginContext>,
