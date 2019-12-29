@@ -25,11 +25,21 @@ impl SnapshotMiddleware for SnapshotLua {
     ) -> SnapshotInstanceResult {
         let file_name = entry.path().file_name().unwrap().to_string_lossy();
 
+        let module_file_name = &context.module_file_name;
+
+        let is_side_effect_file = file_name.get(..module_file_name.len())
+            .filter(|start_of_file_name| *start_of_file_name == module_file_name)
+            .and_then(|_| file_name.get(module_file_name.len()..))
+            .map(|end_of_file_name| match &*end_of_file_name {
+                ".lua" | ".server.lua" | ".client.lua" => true,
+                _ => false,
+            })
+            .unwrap_or(false);
+
         // These paths alter their parent instance, so we don't need to turn
         // them into a script instance here.
-        match &*file_name {
-            "init.lua" | "init.server.lua" | "init.client.lua" => return Ok(None),
-            _ => {}
+        if is_side_effect_file {
+            return Ok(None)
         }
 
         if entry.is_file() {
@@ -37,13 +47,13 @@ impl SnapshotMiddleware for SnapshotLua {
         } else {
             // At this point, our entry is definitely a directory!
 
-            if let Some(snapshot) = snapshot_init(context, vfs, entry, "init.lua")? {
+            if let Some(snapshot) = snapshot_init(context, vfs, entry, &format!("{}.lua", module_file_name))? {
                 // An `init.lua` file turns its parent into a ModuleScript
                 Ok(Some(snapshot))
-            } else if let Some(snapshot) = snapshot_init(context, vfs, entry, "init.server.lua")? {
+            } else if let Some(snapshot) = snapshot_init(context, vfs, entry, &format!("{}.server.lua", module_file_name))? {
                 // An `init.server.lua` file turns its parent into a Script
                 Ok(Some(snapshot))
-            } else if let Some(snapshot) = snapshot_init(context, vfs, entry, "init.client.lua")? {
+            } else if let Some(snapshot) = snapshot_init(context, vfs, entry, &format!("{}.client.lua", module_file_name))? {
                 // An `init.client.lua` file turns its parent into a LocalScript
                 Ok(Some(snapshot))
             } else {

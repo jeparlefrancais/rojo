@@ -18,6 +18,14 @@ pub fn start<F: VfsFetcher>(
     fuzzy_project_path: &Path,
     vfs: &Vfs<F>,
 ) -> (Option<Project>, RojoTree) {
+    start_with_module_name(fuzzy_project_path, vfs, "init".to_owned())
+}
+
+pub fn start_with_module_name<F: VfsFetcher>(
+    fuzzy_project_path: &Path,
+    vfs: &Vfs<F>,
+    module_name: String,
+) -> (Option<Project>, RojoTree) {
     log::trace!("Loading project file from {}", fuzzy_project_path.display());
     let maybe_project = Project::load_fuzzy(fuzzy_project_path).expect("TODO: Project load failed");
 
@@ -39,7 +47,9 @@ pub fn start<F: VfsFetcher>(
         .expect("could not get project path");
 
     log::trace!("Generating snapshot of instances from VFS");
-    let snapshot = snapshot_from_vfs(&InstanceContext::default(), vfs, &entry)
+    let context = InstanceContext::default()
+        .with_module_file_name(module_name);
+    let snapshot = snapshot_from_vfs(&context, vfs, &entry)
         .expect("snapshot failed")
         .expect("snapshot did not return an instance");
 

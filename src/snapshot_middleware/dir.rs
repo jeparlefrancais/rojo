@@ -46,15 +46,17 @@ impl SnapshotMiddleware for SnapshotDir {
 
         let meta_path = entry.path().join("init.meta.json");
 
+
+
         let relevant_paths = vec![
             entry.path().to_path_buf(),
             meta_path.clone(),
             // TODO: We shouldn't need to know about Lua existing in this
             // middleware. Should we figure out a way for that function to add
             // relevant paths to this middleware?
-            entry.path().join("init.lua"),
-            entry.path().join("init.server.lua"),
-            entry.path().join("init.client.lua"),
+            entry.path().join(format!("{}.lua", context.module_file_name)),
+            entry.path().join(format!("{}.server.lua", context.module_file_name)),
+            entry.path().join(format!("{}.client.lua", context.module_file_name)),
         ];
 
         let mut snapshot = InstanceSnapshot::new()

@@ -99,11 +99,23 @@ impl Default for InstanceMetadata {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct InstanceContext {}
+pub struct InstanceContext {
+    #[serde(skip_serializing)]
+    pub module_file_name: String,
+}
+
+impl InstanceContext {
+    pub fn with_module_file_name(mut self, file_name: String) -> Self {
+        self.module_file_name = file_name;
+        self
+    }
+}
 
 impl Default for InstanceContext {
     fn default() -> Self {
-        InstanceContext {}
+        InstanceContext {
+            module_file_name: "init".to_owned(),
+        }
     }
 }
 

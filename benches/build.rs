@@ -36,6 +36,7 @@ fn place_setup<P: AsRef<Path>>(input_path: P) -> (TempDir, BuildCommand) {
     let options = BuildCommand {
         project: input,
         output,
+        module_file_name: "init".to_owned(),
     };
 
     (dir, options)

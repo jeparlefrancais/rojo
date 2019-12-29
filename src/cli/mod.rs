@@ -140,6 +140,10 @@ pub struct BuildCommand {
     /// Where to output the result.
     #[structopt(long, short)]
     pub output: PathBuf,
+
+    /// The file name that will turn folders into ModuleScripts
+    #[structopt(long, default_value = "init")]
+    pub module_file_name: String,
 }
 
 impl BuildCommand {

@@ -203,6 +203,11 @@ pub struct ProjectNode {
         skip_serializing_if = "Option::is_none"
     )]
     pub path: Option<PathBuf>,
+
+    /// If set, defines the name of the file that will turn folders into
+    /// ModuleScripts.
+    #[serde(rename = "$moduleFileName", skip_serializing_if = "Option::is_none")]
+    pub module_file_name: Option<String>,
 }
 
 impl ProjectNode {
